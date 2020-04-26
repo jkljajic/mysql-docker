@@ -52,7 +52,7 @@ if [ "$1" = 'mysqld' ]; then
 			sed -i 's/^log-error=/#&/' /etc/my.cnf
 		fi
 	fi
-
+    
 	if [ ! -d "$DATADIR/mysql" ]; then
 		# If the password variable is a filename we use the contents of the file. We
 		# read this first to make sure that a proper error is generated for empty files.
@@ -199,6 +199,10 @@ user=healthchecker
 socket=${SOCKET}
 password=healthcheckpass
 EOF
+    #Add extra configuration not possible add becouse mysql initialize process like plugins
+	if  ! cat /proc/1/mounts | grep "/etc/my.cnf.d"  &&  [ -d /docker-entrypoint-config.d ]; then
+		cp -r /docker-entrypoint-config.d/* /etc/my.cnf.d
+	fi
 	touch /mysql-init-complete
 	chown -R mysql:mysql "$DATADIR"
 	echo "[Entrypoint] Starting MySQL 8.0.19-1.1.15"

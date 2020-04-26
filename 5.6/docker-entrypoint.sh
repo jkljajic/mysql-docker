@@ -199,6 +199,10 @@ user=healthchecker
 socket=${SOCKET}
 password=healthcheckpass
 EOF
+    #Add extra configuration not possible add becouse mysql initialize process like plugins
+	if  ! cat /proc/1/mounts | grep "/etc/my.cnf.d"  &&  [ -d /docker-entrypoint-config.d ]; then
+		cp -r /docker-entrypoint-config.d/* /etc/my.cnf.d
+	fi
 	touch /mysql-init-complete
 	chown -R mysql:mysql "$DATADIR"
 	echo "[Entrypoint] Starting MySQL 5.6.47-1.1.15"

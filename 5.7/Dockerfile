@@ -28,6 +28,7 @@ RUN yum install -y https://repo.mysql.com/mysql-community-minimal-release-el7.rp
   && yum clean all \
   && mkdir /docker-entrypoint-initdb.d
 
+RUN echo "!includedir /etc/my.cnf.d/" >> /etc/my.cnf
 VOLUME /var/lib/mysql
 
 COPY docker-entrypoint.sh /entrypoint.sh
